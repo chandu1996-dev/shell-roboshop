@@ -21,7 +21,5 @@ else
         IP=$(aws ec2 describe-instances --instance-ids i-0e800ac1272c3725c--query 'Reservations[0].Instances[0].PrivateIpAddress' --output text)
 
 fi
-echo ""instance :$IP"
-
-
+    echo "$instance :$IP"
 done
