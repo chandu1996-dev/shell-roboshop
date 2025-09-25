@@ -7,7 +7,7 @@ for instance in $@
 do
 
 
-INSTANCE_ID=$(aws ec2 run-instances  --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-06a7ef8cd626b5b3e\
+INSTANCE_ID=$(aws ec2 run-instances  --image-id $Ami_ID --instance-type t3.micro --security-group-ids $SG_ID
     --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance }]" --query 'Instances[0].InstanceId' --output text)
 
 # Get Private IP
@@ -18,4 +18,7 @@ INSTANCE_ID=$(aws ec2 run-instances  --image-id ami-09c813fb71547fc4f --instance
         IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
         #RECORD_NAME="$DOMAIN_NAME" # daws86s.fun
     fi
+
+    echo "$instance: $IP"
+
 done
