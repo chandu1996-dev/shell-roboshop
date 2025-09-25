@@ -3,9 +3,9 @@
 Ami_ID="ami-09c813fb71547fc4f"
 SG_ID="sg-06a7ef8cd626b5b3e"
 ZONE_ID="Z00716421P5ZXLU5W7GIT"
+
 for instance in $@
 do
-
 
 INSTANCE_ID=$(aws ec2 run-instances  --image-id $Ami_ID --instance-type t3.micro --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance }]" --query 'Instances[0].InstanceId' --output text)
 
@@ -21,22 +21,21 @@ INSTANCE_ID=$(aws ec2 run-instances  --image-id $Ami_ID --instance-type t3.micro
     echo "$instance: $IP"
 
     aws route53 change-resource-record-sets \
-  --hosted-zone-id $ZONE_ID \
-  --change-batch '
-  {
-    "Comment": "Updating record set"
-    ,"Changes": [{
-      "Action"              : "UPSERT"
-      ,"ResourceRecordSet"  : {
-        "Name"              : "'$RECORD_NAME'"
-        ,"Type"             : "A"
-        ,"TTL"              : 1
-        ,"ResourceRecords"  : [{
-            "Value"         : "'$IP'"
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '
+    {
+        "Comment": "Updating record set"
+        ,"Changes": [{
+        "Action"              : "UPSERT"
+        ,"ResourceRecordSet"  : {
+            "Name"              : "'$RECORD_NAME'"
+            ,"Type"             : "A"
+            ,"TTL"              : 1
+            ,"ResourceRecords"  : [{
+                "Value"         : "'$IP'"
+            }]
+        }
         }]
-      }
-    }]
-  }
-  '
-
+    }
+    '
 done
