@@ -18,7 +18,7 @@ INSTANCE_ID=$(aws ec2 run-instances  --image-id $Ami_ID --instance-type t3.micro
         RECORD_NAME="$DOMAIN_NAME" # born96.fun
     fi
 
-    echo "$instance: $IP"
+  echo "$instance: $IP"
 
     aws route53 change-resource-record-sets \
     --hosted-zone-id $ZONE_ID \
