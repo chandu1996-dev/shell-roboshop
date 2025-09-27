@@ -10,7 +10,7 @@ LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-roboshop/mongodb.log
 MONGODB_HOST="mongodb.born96.fun"
-
+SCRIPT_DIR=$PWD
 
 mkdir -p $LOGS_FOLDER
 echo "Script started executed at: $(date)" | tee -a $LOG_FILE
@@ -38,50 +38,47 @@ VALIDATE $? "enable the nodesjs"
 
 
 dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "intsall the modesjs"
+VALIDATE $? "install the modesjs"
 
 
-# useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-# VALIDATE $? "enable the nodesjs"
+useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+VALIDATE $? "enable the nodesjs"
 
-# mkdir /app  &>>$LOG_FILE    
-# VALIDATE $? "creating a directory name as "app"
-
-# curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
-# VALIDATE $? "downloading the code"
-
-# cd /app &>>$LOG_FILE
-# VALIDATE $? "change the directory to app"
+mkdir -p /app  &>>$LOG_FILE    
+VALIDATE $? "creating a directory name as "app"
 
 
-# unzip /tmp/catalogue.zip &>>$LOG_FILE
-# VALIDATE $? "unzip the downloaded code"
+curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+VALIDATE $? "downlod the catalogue application"
 
-# npm install &>>$LOG_FILE
-# VALIDATE $? "install dependencies"
+cd /app 
+VALIDATE $? "change directory"
 
-# cp catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
-# VALIDATE $? "copying the catalogue.service"
+unzip /tmp/catalogue.zip &>>$LOG_FILE
+VALIDATE $? "unzip the code"
 
-# systemctl daemon-reload &>>$LOG_FILE
-# VALIDATE $? "running the daemon reload"
+npm install &>>$LOG_FILE
+VALIDATE $? "Install dependencies"
+
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service 
+VALIDATE $? "copying systemctl services"
 
 
+systemctl daemon-reload 
 
-# systemctl enable catalogue &>>$LOG_FILE
-# VALIDATE $? "enable the catalogue"
+systemctl enable catalogue &>>$LOG_FILE
+VALIDATE $? "enable the catalogue"
 
-# systemctl start catalogue &>>$LOG_FILE
-# VALIDATE $? "start the catalogue"
+systemctl start catalogue &>>$LOG_FILE
+VALIDATE $? "start the catalogue"
 
-# cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
-# VALIDATE $? "copying the mongo repo"
+cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo 
+VALIDATE $? "copying the mongorepo"
 
-# dnf install mongodb-mongosh -y &>>$LOG_FILE
-# VALIDATE $? "install the mongodb"
+dnf install mongodb-mongosh -y &>>$LOG_FILE
+VALIDATE $? "install the mongodb"
 
-# mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
-# VALIDATE $? "Loading the catalogue products"
 
-# systemctl restart catalogue
-# VALIDATE $? "Restarting the catalogue"
+mongosh --host MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+VALIDATE $? "Load catalogue products"
+
