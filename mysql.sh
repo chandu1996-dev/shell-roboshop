@@ -40,6 +40,7 @@ VALIDATE $? "start mysql"
 
 
 mysql_secure_installation --set-root-pass RoboShop@1
+VALIDATE $? "setting root password"
 
 END_TIME=$(date +%s)
 
