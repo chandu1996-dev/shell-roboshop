@@ -55,8 +55,8 @@ mkdir -p /app  &>>$LOG_FILE
 VALIDATE $? "creating a directory name as app"
 
 
-curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip &>>$LOG_FILE
-VALIDATE $? "downlod the catalogue application"
+curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$LOG_FILE
+VALIDATE $? "downlod the cart application"
 
 cd /app 
 VALIDATE $? "change directory"
@@ -65,23 +65,21 @@ rm -rf /app/*
 VALIDATE $? "Removing existing code"
 
 
-unzip /tmp/user.zip &>>$LOG_FILE
+unzip /tmp/cart.zip &>>$LOG_FILE
 VALIDATE $? "unzip the code"
 
 npm install &>>$LOG_FILE
 VALIDATE $? "Install dependencies"
 
-cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service 
+cp $SCRIPT_DIR/cart.service /etc/systemd/system/cart.service
 VALIDATE $? "copying systemctl services"
 
 
 systemctl daemon-reload 
 
-systemctl enable catalogue &>>$LOG_FILE
-VALIDATE $? "enable the catalogue"
+systemctl enable cart &>>$LOG_FILE
 
-systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "start the catalogue"
+systemctl start cart &>>$LOG_FILE
 
 END_TIME=$(date +%s)
 
