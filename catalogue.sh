@@ -38,49 +38,50 @@ VALIDATE $? "enable the nodesjs"
 
 
 dnf install nodejs -y &>>$LOG_FILE
-VALIDATE $? "insall the modesjs"
-
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-VALIDATE $? "enable the nodesjs"
-
-mkdir /app  &>>$LOG_FILE    
-VALIDATE $? "creating a directory name as "app"
-
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
-VALIDATE $? "downloading the code"
-
-cd /app &>>$LOG_FILE
-VALIDATE $? "change the directory to app"
+VALIDATE $? "intsall the modesjs"
 
 
-unzip /tmp/catalogue.zip &>>$LOG_FILE
-VALIDATE $? "unzip the downloaded code"
+# useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+# VALIDATE $? "enable the nodesjs"
 
-npm install &>>$LOG_FILE
-VALIDATE $? "install dependencies"
+# mkdir /app  &>>$LOG_FILE    
+# VALIDATE $? "creating a directory name as "app"
 
-cp catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
-VALIDATE $? "copying the catalogue.service"
+# curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
+# VALIDATE $? "downloading the code"
 
-systemctl daemon-reload &>>$LOG_FILE
-VALIDATE $? "running the daemon reload"
+# cd /app &>>$LOG_FILE
+# VALIDATE $? "change the directory to app"
+
+
+# unzip /tmp/catalogue.zip &>>$LOG_FILE
+# VALIDATE $? "unzip the downloaded code"
+
+# npm install &>>$LOG_FILE
+# VALIDATE $? "install dependencies"
+
+# cp catalogue.service /etc/systemd/system/catalogue.service &>>$LOG_FILE
+# VALIDATE $? "copying the catalogue.service"
+
+# systemctl daemon-reload &>>$LOG_FILE
+# VALIDATE $? "running the daemon reload"
 
 
 
-systemctl enable catalogue &>>$LOG_FILE
-VALIDATE $? "enable the catalogue"
+# systemctl enable catalogue &>>$LOG_FILE
+# VALIDATE $? "enable the catalogue"
 
-systemctl start catalogue &>>$LOG_FILE
-VALIDATE $? "start the catalogue"
+# systemctl start catalogue &>>$LOG_FILE
+# VALIDATE $? "start the catalogue"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
-VALIDATE $? "copying the mongo repo"
+# cp mongo.repo /etc/yum.repos.d/mongo.repo &>>$LOG_FILE
+# VALIDATE $? "copying the mongo repo"
 
-dnf install mongodb-mongosh -y &>>$LOG_FILE
-VALIDATE $? "install the mongodb"
+# dnf install mongodb-mongosh -y &>>$LOG_FILE
+# VALIDATE $? "install the mongodb"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
-VALIDATE $? "Loading the catalogue products"
+# mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
+# VALIDATE $? "Loading the catalogue products"
 
-systemctl restart catalogue
-VALIDATE $? "Restarting the catalogue"
+# systemctl restart catalogue
+# VALIDATE $? "Restarting the catalogue"
