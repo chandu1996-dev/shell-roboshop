@@ -12,6 +12,7 @@ N="\e[0m"
 LOGS_FOLDER="/var/log/shell-roboshop"
 SCRIPT_NAME=$( echo $0 | cut -d "." -f1 )
 LOG_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # /var/log/shell-roboshop/mongodb.log
+start_TIME=$(date +%s)
 
 mkdir -p $LOGS_FOLDER
 echo "Script started executed at: $(date)" | tee -a $LOG_FILE
@@ -40,11 +41,18 @@ dnf install redis -y &>>$LOG_FILE
 VALIDATE $? "install redis"
 
 
-sed -i 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
-VALIDATE $? "Allow remote connections"
+sed -i -e 's/127.0.0.1/0.0.0.0/g' -e '/protected-mode/ c protected-mode no' /etc/redis/redis.conf
+VALIDATE $? "Allowing Remote connections to Redis"
+
 
 systemctl enable redis &>>$LOG_FILE
 VALIDATE $? "enable redis"
 
 systemctl start redis &>>$LOG_FILE
 VALIDATE $? "start redis"
+
+
+END_TIME=$(date +%s)
+
+TOTAL_TIME=$(($END_TIME - $start_TIME))
+echo -e "script excuted in : $Y $TOTAL_TIME seconds : $N"
