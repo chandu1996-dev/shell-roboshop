@@ -45,8 +45,8 @@ id roboshop
 
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop  &>>$LOG_FILE   
     VALIDATE $? "creating user"
-else 
-    echo "User already exists ...$Y Skipping $N"
+else
+ echo -e "User already exists ...$Y Skipping $N"
 fi
 
 mkdir -p /app  &>>$LOG_FILE    
@@ -58,6 +58,10 @@ VALIDATE $? "downlod the catalogue application"
 
 cd /app 
 VALIDATE $? "change directory"
+
+rm -rf /app/*
+VALIDATE $? "Removing existing code"
+
 
 unzip /tmp/catalogue.zip &>>$LOG_FILE
 VALIDATE $? "unzip the code"
