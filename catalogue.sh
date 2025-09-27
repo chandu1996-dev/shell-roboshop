@@ -47,7 +47,6 @@ id roboshop
     VALIDATE $? "creating user"
 else 
     echo "User already exists ...$Y Skipping $N"
-
 fi
 
 mkdir -p /app  &>>$LOG_FILE    
@@ -84,10 +83,9 @@ VALIDATE $? "copying the mongorepo"
 dnf install mongodb-mongosh -y &>>$LOG_FILE
 VALIDATE $? "install the mongodb"
 
-
 mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOG_FILE
 VALIDATE $? "Load catalogue products"
 
-
 systemctl restart catalogue
 VALIDATE $? "Restarted catalogue"
+
