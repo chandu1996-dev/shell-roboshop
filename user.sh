@@ -76,11 +76,13 @@ VALIDATE $? "copying systemctl services"
 
 
 systemctl daemon-reload 
+VALIDATE $? "daemon reloading"
 
-systemctl enable catalogue &>>$LOG_FILE
+
+systemctl enable user  &>>$LOG_FILE
 VALIDATE $? "enable the catalogue"
 
-systemctl start catalogue &>>$LOG_FILE
+systemctl start user  &>>$LOG_FILE
 VALIDATE $? "start the catalogue"
 
 END_TIME=$(date +%s)
