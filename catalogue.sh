@@ -50,7 +50,7 @@ else
 fi
 
 mkdir -p /app  &>>$LOG_FILE    
-VALIDATE $? "creating a directory name as "app"
+VALIDATE $? "creating a directory name as app"
 
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip &>>$LOG_FILE
