@@ -75,17 +75,11 @@ cp $SCRIPT_DIR/user.service /etc/systemd/system/user.service
 VALIDATE $? "copying systemctl services"
 
 
-systemctl daemon-reload 
-VALIDATE $? "daemon reloading"
 
 
-systemctl enable user  &>>$LOG_FILE
-VALIDATE $? "enable the catalogue"
+systemctl daemon-reload
+systemctl enable user &>>$LOG_FILE
+VALIDATE $? "Enable user"
 
-systemctl start user  &>>$LOG_FILE
-VALIDATE $? "start the catalogue"
-
-END_TIME=$(date +%s)
-
-TOTAL_TIME=$(($END_TIME - $start_TIME))
-echo -e "script excuted in : $Y $TOTAL_TIME seconds : $N"
+systemctl restart user
+VALIDATE $? "Restarted user"
